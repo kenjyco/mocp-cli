@@ -1,0 +1,8 @@
+input-helper
+redis-helper
+parse-helper
+yt-helper
+bg-helper
+chloop
+mocp
+click>=6.0
