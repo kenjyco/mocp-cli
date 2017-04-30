@@ -32,4 +32,4 @@ class _Player(GetCharLoop):
         moc.go(timestamp)
 
 
-Player = _Player(chfunc_dict=chfunc, prompt='mocplayer> ')
+Player = _Player(chfunc_dict=chfunc, name='mocp', prompt='mocplayer> ')
