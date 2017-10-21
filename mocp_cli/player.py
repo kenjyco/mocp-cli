@@ -3,6 +3,23 @@ import input_helper as ih
 from functools import partial
 from collections import OrderedDict
 from chloop import GetCharLoop
+from mocp_cli import logger
+try:
+    from yt_helper import COMMENTS, get_real_basename
+    if COMMENTS is None:
+        raise ImportError
+
+except ImportError:
+    input_hook = None
+else:
+    def input_hook(**kwargs):
+        basename = get_real_basename(moc.get_info_dict().get('file'))
+        timestamp = moc.get_info_dict().get('currentsec')
+        COMMENTS.add(
+            basename=basename,
+            timestamp=timestamp,
+            **kwargs
+        )
 
 
 chfunc = OrderedDict([
@@ -34,4 +51,5 @@ class _Player(GetCharLoop):
         moc.go(timestamp)
 
 
-Player = _Player(chfunc_dict=chfunc, name='mocp', prompt='mocplayer> ')
+Player = _Player(chfunc_dict=chfunc, name='mocp', prompt='mocplayer> ',
+                 input_hook=input_hook)
