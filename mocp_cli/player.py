@@ -11,6 +11,15 @@ try:
 
 except ImportError:
     input_hook = None
+
+    def mark_it():
+        logger.debug(moc.info_string('{currentsec} seconds into {file}'))
+
+    def show_comments():
+        #
+        # Maybe try to grep for `moc.get_info_dict().get('file')` in logger file
+        #
+        pass
 else:
     def input_hook(**kwargs):
         basename = get_real_basename(moc.get_info_dict().get('file'))
@@ -21,10 +30,22 @@ else:
             **kwargs
         )
 
+    def mark_it():
+        input_hook(text='mark')
+
+    def show_comments():
+        basename = get_real_basename(moc.get_info_dict().get('file'))
+        print('\n'.join(COMMENTS.find(
+            'basename:{}'.format(basename),
+            item_format=' - {timestamp} -> {text}'
+        )))
+
 
 chfunc = OrderedDict([
     (' ', (moc.toggle_pause, 'pause/unpause')),
     ('i', (lambda: print(moc.info_string()), 'show info about currently playing file')),
+    ('c', (show_comments, 'show comments (requires yt_helper)')),
+    ('m', (mark_it, 'mark the current timestamp')),
     ('n', (moc.next, 'next file in playlist')),
     ('p', (moc.previous, 'previous file in playlist')),
     ('H', (partial(moc.seek, -30), 'rewind 30 seconds')),
