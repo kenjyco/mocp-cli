@@ -23,15 +23,13 @@ except ImportError:
 else:
     def input_hook(**kwargs):
         basename = get_real_basename(moc.get_info_dict().get('file'))
-        timestamp = moc.get_info_dict().get('currentsec')
         COMMENTS.add(
             basename=basename,
-            timestamp=timestamp,
             **kwargs
         )
 
     def mark_it():
-        input_hook(text='mark')
+        input_hook(text='mark', **pre_input_hook())
 
     def show_comments():
         basename = get_real_basename(moc.get_info_dict().get('file'))
@@ -39,6 +37,12 @@ else:
             'basename:{}'.format(basename),
             item_format=' - {timestamp} -> {text}'
         )))
+
+
+def pre_input_hook():
+    return {
+        'timestamp': moc.get_info_dict().get('currentsec')
+    }
 
 
 chfunc = OrderedDict([
@@ -73,4 +77,4 @@ class _Player(GetCharLoop):
 
 
 Player = _Player(chfunc_dict=chfunc, name='mocp', prompt='mocplayer> ',
-                 input_hook=input_hook)
+                 input_hook=input_hook, pre_input_hook=pre_input_hook)
