@@ -48,7 +48,7 @@ def pre_input_hook():
 chfunc = OrderedDict([
     (' ', (moc.toggle_pause, 'pause/unpause')),
     ('i', (lambda: print(moc.info_string()), 'show info about currently playing file')),
-    ('c', (show_comments, 'show comments (requires yt_helper)')),
+    ('c', (show_comments, 'show comments/marks (requires yt_helper package)')),
     ('m', (mark_it, 'mark the current timestamp')),
     ('q', (lambda: None, 'quit')),
     ('Q', (moc.stop_server, 'stop MOC server and quit')),
