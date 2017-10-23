@@ -50,6 +50,8 @@ chfunc = OrderedDict([
     ('i', (lambda: print(moc.info_string()), 'show info about currently playing file')),
     ('c', (show_comments, 'show comments (requires yt_helper)')),
     ('m', (mark_it, 'mark the current timestamp')),
+    ('q', (lambda: None, 'quit')),
+    ('Q', (moc.stop_server, 'stop MOC server and quit')),
     ('n', (moc.next, 'next file in playlist')),
     ('p', (moc.previous, 'previous file in playlist')),
     ('H', (partial(moc.seek, -30), 'rewind 30 seconds')),
@@ -77,4 +79,5 @@ class _Player(GetCharLoop):
 
 
 Player = _Player(chfunc_dict=chfunc, name='mocp', prompt='mocplayer> ',
-                 input_hook=input_hook, pre_input_hook=pre_input_hook)
+                 input_hook=input_hook, pre_input_hook=pre_input_hook,
+                 break_chars=['q', 'Q'])
