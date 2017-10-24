@@ -98,6 +98,8 @@ chfunc = OrderedDict([
     ('c', (show_comments, 'show comments/marks (requires yt_helper package)')),
     ('m', (mark_it, 'mark the current timestamp')),
     ('J', (jump_to_select, 'jump to a saved comment or mark (requires yt_helper package)')),
+    ('f', (partial(moc.find_and_play, '.'), 'find and play audio files found in current directory')),
+    ('F', (partial(moc.find_select_and_play, '.'), 'find, select, and play audio files found in current directory')),
     ('q', (lambda: None, 'quit')),
     ('Q', (moc.stop_server, 'stop MOC server and quit')),
     ('n', (moc.next, 'next file in playlist')),
@@ -128,6 +130,10 @@ class _Player(GetCharLoop):
     def jump(self):
         """Jump to a saved comment or mark"""
         jump_to_select()
+
+    def find(self, *glob_patterns):
+        """Find and select audio files at specified glob patterns"""
+        moc.find_select_and_play(*glob_patterns)
 
 
 Player = _Player(chfunc_dict=chfunc, name='mocp', prompt='mocplayer> ',
