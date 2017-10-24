@@ -62,11 +62,42 @@ def pre_input_hook():
     }
 
 
+def jump_to_select():
+    """Use ih.make_selections to select a mark/comment for the current file
+
+    Jump immediately to timestamp and prompt for a note if the mark has no note
+    """
+    comments = get_comments()
+    if len(comments) > 10:
+        unbuffered = False
+    else:
+        unbuffered = True
+
+    selected = ih.make_selections(
+        comments,
+        item_format='{timestamp} .::. {text}',
+        prompt='Select mark/comment',
+        wrap=False,
+        unbuffered=unbuffered
+    )
+
+    if selected:
+        moc.go(selected[0]['timestamp'])
+        if selected[0]['text'] == 'mark':
+            comment = ih.user_input_fancy('note for mark')
+            if comment != {'text': ''}:
+                COMMENTS.update(
+                    selected[0]['_id'],
+                    **comment
+                )
+
+
 chfunc = OrderedDict([
     (' ', (moc.toggle_pause, 'pause/unpause')),
     ('i', (lambda: print(moc.info_string()), 'show info about currently playing file')),
     ('c', (show_comments, 'show comments/marks (requires yt_helper package)')),
     ('m', (mark_it, 'mark the current timestamp')),
+    ('J', (jump_to_select, 'jump to a saved comment or mark (requires yt_helper package)')),
     ('q', (lambda: None, 'quit')),
     ('Q', (moc.stop_server, 'stop MOC server and quit')),
     ('n', (moc.next, 'next file in playlist')),
@@ -91,8 +122,12 @@ class _Player(GetCharLoop):
         moc.seek(int(num))
 
     def go(self, timestamp):
-        """Jump to a particular timestamp"""
+        """Go to a particular timestamp"""
         moc.go(timestamp)
+
+    def jump(self):
+        """Jump to a saved comment or mark"""
+        jump_to_select()
 
 
 Player = _Player(chfunc_dict=chfunc, name='mocp', prompt='mocplayer> ',
