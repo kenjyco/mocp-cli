@@ -15,6 +15,9 @@ except ImportError:
     def mark_it():
         logger.debug(moc.info_string('{currentsec} seconds into {file}'))
 
+    def get_comments(**kwargs):
+        pass
+
     def show_comments():
         #
         # Maybe try to grep for `moc.get_info_dict().get('file')` in logger file
@@ -31,12 +34,26 @@ else:
     def mark_it():
         input_hook(text='mark', **pre_input_hook())
 
-    def show_comments():
+    def get_comments(**kwargs):
+        """Get comments for current file playing
+
+        - kwargs: passed to `COMMENTS.fimd`
+            - if no kwargs passed in, use `all_fields=True, admin_fmt=True` by default
+        """
+        if not kwargs:
+            kwargs = {'all_fields': True, 'admin_fmt': True}
         basename = get_real_basename(moc.get_info_dict().get('file'))
-        print('\n'.join(COMMENTS.find(
+        return COMMENTS.find(
             'basename:{}'.format(basename),
-            item_format=' - {timestamp} -> {text}'
-        )))
+            **kwargs
+        )
+
+    def show_comments(item_format=' - {timestamp} -> {text}'):
+        """Show comments for current file playing
+
+        - item_format: passed along to `COMMENTS.find` via `get_comments` func
+        """
+        print('\n'.join(get_comments(item_format=item_format)))
 
 
 def pre_input_hook():
