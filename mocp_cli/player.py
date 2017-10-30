@@ -37,11 +37,14 @@ else:
     def get_comments(**kwargs):
         """Get comments for current file playing
 
-        - kwargs: passed to `COMMENTS.fimd`
-            - if no kwargs passed in, use `all_fields=True, admin_fmt=True` by default
+        - kwargs: passed to `COMMENTS.find`
+            - if no 'item_format' passed in, use `all_fields=True`
+            - if no 'ts_fmt' or 'ts_tz' passed in, use `admin_fmt=True`
         """
-        if not kwargs:
-            kwargs = {'all_fields': True, 'admin_fmt': True}
+        if 'ts_fmt' not in kwargs and 'ts_tz' not in kwargs:
+            kwargs['admin_fmt'] = True
+        if 'item_format' not in kwargs:
+            kwargs['all_fields'] = True
         basename = get_real_basename(moc.get_info_dict().get('file'))
         return COMMENTS.find(
             'basename:{}'.format(basename),
