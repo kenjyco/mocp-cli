@@ -113,7 +113,7 @@ def jump_to_select():
     selected = select_comments()
     if selected:
         moc.go(selected[0]['timestamp'])
-        if selected[0]['text'] == 'mark':
+        if selected[0]['text'] in ('mark', ''):
             comment = ih.user_input_fancy('note for mark')
             if comment != {'text': ''}:
                 COMMENTS.update(
