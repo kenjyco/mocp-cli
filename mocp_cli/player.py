@@ -122,6 +122,32 @@ def jump_to_select():
                 )
 
 
+def jumploop():
+    """Loop an unbuffered input session, jumping between selected marks (up to 10)"""
+    selected = select_comments(
+        prompt='Select up to 10 comments for jumploop',
+        unbuffered=False
+    )
+    if selected:
+        selected = selected[:10]
+        while True:
+            print()
+            try:
+                idx = ih.make_selections(
+                    selected,
+                    item_format='{timestamp} -> {text}',
+                    prompt='Select mark/comment or ctrl+c to break loop',
+                    wrap=False,
+                    unbuffered=True,
+                    raise_interrupt=True
+                )
+                if idx:
+                    moc.go(idx[0]['timestamp'])
+            except KeyboardInterrupt:
+                print()
+                break
+
+
 def most_commented_files_play_select(limit=25):
     """Select files that have been most commented and play"""
     selected = ih.make_selections(
@@ -212,6 +238,10 @@ class _Player(GetCharLoop):
     def jump(self):
         """Jump to a saved comment or mark"""
         jump_to_select()
+
+    def jumploop(self):
+        """Loop an unbuffered input session, jumping between selected marks (up to 10)"""
+        jumploop()
 
     def most_commented(self):
         """Select files that have been most commented and play"""
