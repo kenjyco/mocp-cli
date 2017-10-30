@@ -5,7 +5,7 @@ from collections import OrderedDict
 from chloop import GetCharLoop
 from mocp_cli import logger
 try:
-    from yt_helper import COMMENTS, get_real_basename
+    from yt_helper import COMMENTS, FILES, get_real_basename
     if COMMENTS is None:
         raise ImportError
 
@@ -122,11 +122,28 @@ def jump_to_select():
                 )
 
 
+def most_commented_files_play_select(limit=25):
+    """Select files that have been most commented and play"""
+    selected = ih.make_selections(
+        COMMENTS.top_values_for_index('basename', limit=limit),
+        prompt='Select basenames to play',
+        item_format='{} ({})',
+        wrap=False
+    )
+    if selected:
+        paths = [
+            '{}/{}*'.format(FILES[basename].get('dirname', ''), basename)
+            for basename, count in selected
+        ]
+        moc.find_and_play(*paths)
+
+
 chfunc = OrderedDict([
     (' ', (moc.toggle_pause, 'pause/unpause')),
     ('i', (lambda: print(moc.info_string()), 'show info about currently playing file')),
-    ('c', (show_comments, 'show comments/marks (requires yt_helper package)')),
     ('m', (mark_it, 'mark the current timestamp')),
+    ('c', (show_comments, 'show comments/marks (requires yt_helper package)')),
+    ('C', (most_commented_files_play_select, 'select files that have been most commented (requires yt_helper package)')),
     ('J', (jump_to_select, 'jump to a saved comment or mark (requires yt_helper package)')),
     ('f', (partial(moc.find_and_play, '.'), 'find and play audio files found in current directory')),
     ('F', (partial(moc.find_select_and_play, '.'), 'find, select, and play audio files found in current directory')),
@@ -160,6 +177,10 @@ class _Player(GetCharLoop):
     def jump(self):
         """Jump to a saved comment or mark"""
         jump_to_select()
+
+    def most_commented(self):
+        """Select files that have been most commented and play"""
+        most_commented_files_play_select()
 
     def find(self, *glob_patterns):
         """Find and select audio files at specified glob patterns"""
