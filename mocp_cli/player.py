@@ -138,6 +138,39 @@ def most_commented_files_play_select(limit=25):
         moc.find_and_play(*paths)
 
 
+def edit_comment_timestamp_select():
+    """Use select_comments to select a mark/comment for the current file
+
+    Prompt for a new timestamp (usually +/-1 from current timestamp)
+    """
+    selected = select_comments(prompt='Select mark/comment to edit timestamp')
+    if selected:
+        prompt = 'Enter new timestamp (old was {})'.format(selected[0].get('timestamp', ''))
+        timestamp = ih.user_input(prompt)
+        if timestamp:
+            try:
+                timestamp = int(timestamp)
+            except ValueError:
+                print('{} is not an integer'.format(timestamp))
+            else:
+                _id = selected[0]['_id']
+                COMMENTS.update(_id, timestamp=timestamp)
+    else:
+        print()
+
+
+def delete_comments_select():
+    """Use COMMENTS.select_and_modify to choose which comments to delete
+    """
+    basename = get_real_basename(moc.get_info_dict().get('file'))
+    return COMMENTS.select_and_modify(
+        action='delete',
+        terms='basename:{}'.format(basename),
+        prompt='Select comments to delete (separate by space)',
+        menu_item_format='{timestamp} -> {text} .::. {_ts}'
+    )
+
+
 chfunc = OrderedDict([
     (' ', (moc.toggle_pause, 'pause/unpause')),
     ('i', (lambda: print(moc.info_string()), 'show info about currently playing file')),
@@ -145,6 +178,8 @@ chfunc = OrderedDict([
     ('c', (show_comments, 'show comments/marks (requires yt_helper package)')),
     ('C', (most_commented_files_play_select, 'select files that have been most commented (requires yt_helper package)')),
     ('J', (jump_to_select, 'jump to a saved comment or mark (requires yt_helper package)')),
+    ('e', (edit_comment_timestamp_select, 'select comment/mark to edit timestamp (requires yt_helper package)')),
+    ('d', (delete_comments_select, 'select comments/marks to delete (requires yt_helper package)')),
     ('f', (partial(moc.find_and_play, '.'), 'find and play audio files found in current directory')),
     ('F', (partial(moc.find_select_and_play, '.'), 'find, select, and play audio files found in current directory')),
     ('q', (lambda: None, 'quit')),
@@ -181,6 +216,14 @@ class _Player(GetCharLoop):
     def most_commented(self):
         """Select files that have been most commented and play"""
         most_commented_files_play_select()
+
+    def delete_comments(self):
+        """Select comments/marks for currently playing file to delete"""
+        delete_comments_select()
+
+    def edit_timestamp(self):
+        """Select comment/mark for currently playing file to edit the timestamp"""
+        edit_comment_timestamp_select()
 
     def find(self, *glob_patterns):
         """Find and select audio files at specified glob patterns"""
