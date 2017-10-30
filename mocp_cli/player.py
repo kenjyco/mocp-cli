@@ -23,6 +23,9 @@ except ImportError:
         # Maybe try to grep for `moc.get_info_dict().get('file')` in logger file
         #
         pass
+
+    def select_comments():
+        pass
 else:
     def input_hook(**kwargs):
         basename = get_real_basename(moc.get_info_dict().get('file'))
@@ -51,12 +54,49 @@ else:
             **kwargs
         )
 
-    def show_comments(item_format=' - {timestamp} -> {text}'):
+    def show_comments(item_format=' - {timestamp} -> {text} .::. {_ts}', **kwargs):
         """Show comments for current file playing
 
         - item_format: passed along to `COMMENTS.find` via `get_comments` func
+        - kwargs: also passed along to `COMMENTS.find` via `get_comments` func
         """
-        print('\n'.join(get_comments(item_format=item_format)))
+        print('\n'.join(get_comments(item_format=item_format, **kwargs)))
+
+
+    def select_comments(item_format='{timestamp} -> {text}',
+                        prompt='Select mark/comment', unbuffered=None, **kwargs):
+        """Select comments for current file playing
+
+        - item_format: passed along to ih.make_selections func
+        - prompt: passed along to ih.make_selections func
+        - unbuffered: if False is explicitly passed in, don't use unbuffered
+          when number of comments is less than 10
+        - kwargs: passed along to `COMMENTS.find` via `get_comments` func
+            - if no 'post_fetch_sort_key' passed in, use
+              `post_fetch_sort_key='timestamp', sort_key_default_val=0`
+        """
+        if 'post_fetch_sort_key' not in kwargs:
+            kwargs.update({
+                'post_fetch_sort_key': 'timestamp',
+                'sort_key_default_val': 0
+            })
+
+        comments = get_comments(**kwargs)
+        if unbuffered is None:
+            if len(comments) > 10:
+                unbuffered = False
+            else:
+                unbuffered = True
+        else:
+            unbuffered = False
+
+        return ih.make_selections(
+            comments,
+            item_format=item_format,
+            prompt=prompt,
+            wrap=False,
+            unbuffered=unbuffered
+        )
 
 
 def pre_input_hook():
@@ -66,24 +106,11 @@ def pre_input_hook():
 
 
 def jump_to_select():
-    """Use ih.make_selections to select a mark/comment for the current file
+    """Use select_comments to select a mark/comment for the current file
 
     Jump immediately to timestamp and prompt for a note if the mark has no note
     """
-    comments = get_comments()
-    if len(comments) > 10:
-        unbuffered = False
-    else:
-        unbuffered = True
-
-    selected = ih.make_selections(
-        comments,
-        item_format='{timestamp} .::. {text}',
-        prompt='Select mark/comment',
-        wrap=False,
-        unbuffered=unbuffered
-    )
-
+    selected = select_comments()
     if selected:
         moc.go(selected[0]['timestamp'])
         if selected[0]['text'] == 'mark':
