@@ -213,7 +213,7 @@ chfunc = OrderedDict([
     ('i', (lambda: print(moc.info_string()), 'show info about currently playing file')),
     ('m', (mark_it, 'mark the current timestamp')),
     ('c', (show_comments, 'show comments/marks (requires yt_helper package)')),
-    ('C', (most_commented_files_play_select, 'select files that have been most commented (requires yt_helper package)')),
+    ('C', (most_commented_files_play_select, 'select files that have been most commented and play (requires yt_helper package)')),
     ('J', (jump_to_select, 'jump to a saved comment or mark (requires yt_helper package)')),
     ('e', (edit_comment_timestamp_select, 'select comment/mark to edit timestamp (requires yt_helper package)')),
     ('d', (delete_comments_select, 'select comments/marks to delete (requires yt_helper package)')),
@@ -254,9 +254,10 @@ class _Player(GetCharLoop):
         """Loop an unbuffered input session, jumping between selected marks (up to 10)"""
         jumploop()
 
-    def most_commented(self):
+    def most_commented(self, limit=25):
         """Select files that have been most commented and play"""
-        most_commented_files_play_select()
+        most_commented_files_play_select(int(limit))
+
 
     def delete_comments(self):
         """Select comments/marks for currently playing file to delete"""
