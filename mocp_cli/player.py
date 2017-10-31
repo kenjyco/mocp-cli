@@ -129,9 +129,10 @@ def jumploop():
         unbuffered=False
     )
     if selected:
+        basename = get_real_basename(moc.get_info_dict().get('file'))
         selected = selected[:10]
         while True:
-            print()
+            print('\n{}\n'.format(basename))
             try:
                 idx = ih.make_selections(
                     selected,
@@ -142,7 +143,11 @@ def jumploop():
                     raise_interrupt=True
                 )
                 if idx:
-                    moc.go(idx[0]['timestamp'])
+                    if idx[0]['basename'] not in moc.info_string():
+                        play_basenames(idx[0]['basename'])
+                        moc.go(idx[0]['timestamp'])
+                    else:
+                        moc.go(idx[0]['timestamp'])
             except KeyboardInterrupt:
                 print()
                 break
