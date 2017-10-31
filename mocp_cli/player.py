@@ -148,6 +148,16 @@ def jumploop():
                 break
 
 
+def play_basenames(*basenames):
+    """Use FILES to generate path globs to basenames and play"""
+    paths = [
+        '{}/{}*'.format(FILES[basename].get('dirname', ''), basename)
+        for basename in basenames
+    ]
+    if paths:
+        moc.find_and_play(*paths)
+
+
 def most_commented_files_play_select(limit=25):
     """Select files that have been most commented and play"""
     selected = ih.make_selections(
@@ -157,11 +167,7 @@ def most_commented_files_play_select(limit=25):
         wrap=False
     )
     if selected:
-        paths = [
-            '{}/{}*'.format(FILES[basename].get('dirname', ''), basename)
-            for basename, count in selected
-        ]
-        moc.find_and_play(*paths)
+        play_basenames(*[s[0] for s in selected])
 
 
 def edit_comment_timestamp_select():
