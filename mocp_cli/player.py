@@ -163,6 +163,17 @@ def play_basenames(*basenames):
         moc.find_and_play(*paths)
 
 
+def recent_files_play_select(limit=25):
+    """Select files that were most recently added and play"""
+    selected = ih.make_selections(
+        FILES.recent_unique_values(limit=limit),
+        prompt='Select basenames to play',
+        wrap=False
+    )
+    if selected:
+        play_basenames(*selected)
+
+
 def most_commented_files_play_select(limit=25):
     """Select files that have been most commented and play"""
     selected = ih.make_selections(
@@ -214,6 +225,7 @@ chfunc = OrderedDict([
     ('m', (mark_it, 'mark the current timestamp')),
     ('c', (show_comments, 'show comments/marks (requires yt_helper package)')),
     ('C', (most_commented_files_play_select, 'select files that have been most commented and play (requires yt_helper package)')),
+    ('R', (recent_files_play_select, 'select files that were most recently added and play (requires yt_helper package)')),
     ('J', (jump_to_select, 'jump to a saved comment or mark (requires yt_helper package)')),
     ('e', (edit_comment_timestamp_select, 'select comment/mark to edit timestamp (requires yt_helper package)')),
     ('d', (delete_comments_select, 'select comments/marks to delete (requires yt_helper package)')),
@@ -258,6 +270,9 @@ class _Player(GetCharLoop):
         """Select files that have been most commented and play"""
         most_commented_files_play_select(int(limit))
 
+    def recent_files(self, limit=25):
+        """Select files that were most recently added and play"""
+        recent_files_play_select(int(limit))
 
     def delete_comments(self):
         """Select comments/marks for currently playing file to delete"""
