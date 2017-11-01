@@ -22,7 +22,19 @@ Verify that the MOC server can start
 
 > Press `q` to quit.
 
+Install Redis and start server
+
+```
+% sudo apt-get install -y redis-server
+
+or
+
+% brew install redis@3.2
+% brew services start redis@3.2
+```
+
 Install with `pip`
+
 ```
 % pip3 install mocp-cli
 ```
