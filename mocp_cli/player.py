@@ -74,12 +74,16 @@ else:
         - kwargs: passed along to `COMMENTS.find` via `get_comments` func
             - if no 'post_fetch_sort_key' passed in, use
               `post_fetch_sort_key='timestamp', sort_key_default_val=0`
+            - if no 'limit' pass in, use 75 by default
         """
         if 'post_fetch_sort_key' not in kwargs:
             kwargs.update({
                 'post_fetch_sort_key': 'timestamp',
                 'sort_key_default_val': 0
             })
+
+        if 'limit' not in kwargs:
+            kwargs.update({'limit': 75})
 
         comments = get_comments(**kwargs)
         if unbuffered is None:
