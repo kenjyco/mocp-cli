@@ -5,7 +5,7 @@ from collections import OrderedDict
 from chloop import GetCharLoop
 from mocp_cli import logger
 try:
-    from yt_helper import COMMENTS, FILES, get_real_basename
+    from yt_helper import AUDIO_COMMENTS as COMMENTS, FILES, get_real_basename
     if COMMENTS is None:
         raise ImportError
 
