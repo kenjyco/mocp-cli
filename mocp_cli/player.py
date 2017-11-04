@@ -170,12 +170,13 @@ def play_basenames(*basenames):
 def recent_files_play_select(limit=25):
     """Select files that were most recently added and play"""
     selected = ih.make_selections(
-        FILES.recent_unique_values(limit=limit),
+        FILES.find('audio:True', get_fields='basename', admin_fmt=True, limit=limit),
+        item_format='{basename} .::. {_ts}',
         prompt='Select basenames to play',
         wrap=False
     )
     if selected:
-        play_basenames(*selected)
+        play_basenames(*[x['basename'] for x in selected])
 
 
 def most_commented_files_play_select(limit=25):
