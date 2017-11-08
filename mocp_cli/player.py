@@ -144,7 +144,8 @@ def jumploop():
                     prompt='Select mark/comment or ctrl+c to break loop',
                     wrap=False,
                     unbuffered=True,
-                    raise_interrupt=True
+                    raise_interrupt=True,
+                    raise_exception_chars=[' ']
                 )
                 if idx:
                     if idx[0]['basename'] not in moc.info_string():
@@ -155,6 +156,8 @@ def jumploop():
             except KeyboardInterrupt:
                 print()
                 break
+            except Exception:
+                moc.toggle_pause()
 
 
 def play_basenames(*basenames):
