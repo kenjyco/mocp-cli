@@ -70,7 +70,7 @@ else:
         - item_format: passed along to ih.make_selections func
         - prompt: passed along to ih.make_selections func
         - unbuffered: if False is explicitly passed in, don't use unbuffered
-          when number of comments is less than 10
+          when number of comments is less than 52
         - kwargs: passed along to `COMMENTS.find` via `get_comments` func
             - if no 'post_fetch_sort_key' passed in, use
               `post_fetch_sort_key='timestamp', sort_key_default_val=0`
@@ -87,12 +87,10 @@ else:
 
         comments = get_comments(**kwargs)
         if unbuffered is None:
-            if len(comments) > 10:
+            if len(comments) > 52:
                 unbuffered = False
             else:
                 unbuffered = True
-        else:
-            unbuffered = False
 
         return ih.make_selections(
             comments,
@@ -127,14 +125,14 @@ def jump_to_select():
 
 
 def jumploop():
-    """Loop an unbuffered input session, jumping between selected marks (up to 10)"""
+    """Loop an unbuffered input session, jumping between selected marks (up to 52)"""
     selected = select_comments(
-        prompt='Select up to 10 comments for jumploop',
+        prompt='Select up to 52 comments for jumploop (or type "all")',
         unbuffered=False
     )
     if selected:
         basename = get_real_basename(moc.get_info_dict().get('file'))
-        selected = selected[:10]
+        selected = selected[:52]
         while True:
             print('\n{}\n'.format(basename))
             try:
