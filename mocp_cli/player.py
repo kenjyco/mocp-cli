@@ -1,5 +1,6 @@
 import moc
 import input_helper as ih
+from os import remove
 from functools import partial
 from collections import OrderedDict
 from chloop import GetCharLoop
@@ -179,6 +180,45 @@ def play_basenames(*basenames):
         moc.find_and_play(*paths)
 
 
+def delete(basename=None):
+    """Delete audio file and remove related data from COMMENTS
+
+    In FILES, the item will be updated to 'audio=False' in case there is a
+    related video file of the same name (which this will not delete)
+    """
+    if basename is None:
+        basename = get_real_basename(moc.get_info_dict().get('file'))
+        if not basename:
+            return
+    paths = get_paths_from_basenames(basename)
+    if paths:
+        files = moc.find_audio(*paths)
+        if files:
+            file_id = FILES[basename].get('_id')
+            comment_ids = [
+                x['_id']
+                for x in COMMENTS.find('basename:{}'.format(basename), get_fields='_id')
+            ]
+            print('For {}, found {} file(s) and {} comment(s)'.format(
+                repr(basename),
+                len(files),
+                len(comment_ids)
+            ))
+            yn = ih.user_input('\nAre you sure you want to delete? (y/n)')
+            if yn.lower().startswith('y'):
+                for f in files:
+                    try:
+                        remove(f.strip('\'"'))
+                    except Exception as e:
+                        logger.error('Could not delete {}... {}'.format(repr(f), repr(e)))
+                    else:
+                        logger.info('Deleted {}'.format(repr(f)))
+                if file_id:
+                    FILES.update(file_id, audio=False)
+                if comment_ids:
+                    COMMENTS.delete_many(*comment_ids)
+
+
 def recent_files_play_select(limit=25):
     """Select files that were most recently added and play"""
     selected = ih.make_selections(
@@ -247,6 +287,7 @@ chfunc = OrderedDict([
     ('\x01', (partial(jumploop, choose_all=True), 'start jumploop session with first 52 marks selected (requires yt_helper package)')),
     ('e', (edit_comment_timestamp_select, 'select comment/mark to edit timestamp (requires yt_helper package)')),
     ('d', (delete_comments_select, 'select comments/marks to delete (requires yt_helper package)')),
+    ('D', (delete, 'delete current playing file from filesystem and remove from FILES/COMMENTS (requires yt_helper package)')),
     ('f', (partial(moc.find_and_play, '.'), 'find and play audio files found in current directory')),
     ('F', (partial(moc.find_select_and_play, '.'), 'find, select, and play audio files found in current directory')),
     ('q', (lambda: None, 'quit')),
@@ -295,6 +336,10 @@ class _Player(GetCharLoop):
     def delete_comments(self):
         """Select comments/marks for currently playing file to delete"""
         delete_comments_select()
+
+    def delete(self):
+        """Delete current audio file and remove related data from COMMENTS"""
+        delete()
 
     def edit_timestamp(self):
         """Select comment/mark for currently playing file to edit the timestamp"""
