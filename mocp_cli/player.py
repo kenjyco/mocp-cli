@@ -164,12 +164,17 @@ def jumploop(choose_all=False):
                 moc.toggle_pause()
 
 
-def play_basenames(*basenames):
-    """Use FILES to generate path globs to basenames and play"""
-    paths = [
+def get_paths_from_basenames(*basenames):
+    """Return a list of path globs for basenames (determined from FILES)"""
+    return [
         '{}/{}*'.format(FILES[basename].get('dirname', ''), basename)
         for basename in basenames
     ]
+
+
+def play_basenames(*basenames):
+    """Use FILES to generate path globs to basenames and play"""
+    paths = get_paths_from_basenames(*basenames)
     if paths:
         moc.find_and_play(*paths)
 
