@@ -124,12 +124,18 @@ def jump_to_select():
                 )
 
 
-def jumploop():
+def jumploop(choose_all=False):
     """Loop an unbuffered input session, jumping between selected marks (up to 52)"""
-    selected = select_comments(
-        prompt='Select up to 52 comments for jumploop (or type "all")',
-        unbuffered=False
-    )
+    if choose_all:
+        selected = get_comments(
+            post_fetch_sort_key='timestamp',
+            sort_key_default_val=0
+        )
+    else:
+        selected = select_comments(
+            prompt='Select up to 52 comments for jumploop (or type "all")',
+            unbuffered=False
+        )
     if selected:
         basename = get_real_basename(moc.get_info_dict().get('file'))
         selected = selected[:52]
@@ -233,6 +239,7 @@ chfunc = OrderedDict([
     ('C', (most_commented_files_play_select, 'select files that have been most commented and play (requires yt_helper package)')),
     ('R', (recent_files_play_select, 'select files that were most recently added and play (requires yt_helper package)')),
     ('J', (jump_to_select, 'jump to a saved comment or mark (requires yt_helper package)')),
+    ('\x01', (partial(jumploop, choose_all=True), 'start jumploop session with first 52 marks selected (requires yt_helper package)')),
     ('e', (edit_comment_timestamp_select, 'select comment/mark to edit timestamp (requires yt_helper package)')),
     ('d', (delete_comments_select, 'select comments/marks to delete (requires yt_helper package)')),
     ('f', (partial(moc.find_and_play, '.'), 'find and play audio files found in current directory')),
