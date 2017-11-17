@@ -79,12 +79,14 @@ else:
         """Get comments for current file playing
 
         - kwargs: passed to `COMMENTS.find`
-            - if no 'item_format' passed in, use `all_fields=True`
-            - if no 'ts_fmt' or 'ts_tz' passed in, use `admin_fmt=True`
+            - if no 'item_format' or 'get_fields' passed in, use `all_fields=True`
+            - if no 'ts_fmt' or 'ts_tz' passed in, and 'include_meta=False' not
+              passed in use `admin_fmt=True`
         """
         if 'ts_fmt' not in kwargs and 'ts_tz' not in kwargs:
-            kwargs['admin_fmt'] = True
-        if 'item_format' not in kwargs:
+            if 'include_meta' in kwargs and kwargs.get('include_meta') is True:
+                kwargs['admin_fmt'] = True
+        if 'item_format' not in kwargs and 'get_fields' not in kwargs:
             kwargs['all_fields'] = True
         basename = get_current_basename()
         return COMMENTS.find(
