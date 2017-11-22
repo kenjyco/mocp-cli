@@ -94,13 +94,14 @@ else:
             **kwargs
         )
 
-    def show_comments(item_format=' - {timestamp} -> {text} .::. {_ts}', **kwargs):
+    def show_comments(item_format=' - {timestamp} -> {text} .::. {_ts}', admin_fmt=True, **kwargs):
         """Show comments for current file playing
 
         - item_format: passed along to `COMMENTS.find` via `get_comments` func
+        - admin_fmt: passed along to `COMMENTS.find` via `get_comments` func
         - kwargs: also passed along to `COMMENTS.find` via `get_comments` func
         """
-        print('\n'.join(get_comments(item_format=item_format, **kwargs)))
+        print('\n'.join(get_comments(item_format=item_format, admin_fmt=admin_fmt, **kwargs)))
 
 
     def select_comments(item_format='{timestamp} -> {text}',
