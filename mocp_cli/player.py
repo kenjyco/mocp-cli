@@ -159,7 +159,7 @@ else:
 
     def jumploop(choose_all=False):
         """Loop an unbuffered input session, jumping between selected marks (up to 52)"""
-        num_comments = len(get_comments(get_fields='timestamp', include_meta=False))
+        num_comments = get_comments(count=True)
         if choose_all:
             selected = get_comments(
                 post_fetch_sort_key='timestamp',
