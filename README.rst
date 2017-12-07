@@ -119,6 +119,9 @@ the ``moc.find_and_play`` function.
     :shortcuts to see all hotkeys
 
     mocplayer> :docstrings
+    .:: delete ::.
+    Delete current audio file and remove related data from COMMENTS
+
     .:: delete_comments ::.
     Select comments/marks for currently playing file to delete
 
@@ -147,16 +150,16 @@ the ``moc.find_and_play`` function.
     Jump to a saved comment/mark
 
     .:: jumploop ::.
-    Loop an unbuffered input session, jumping between selected marks (up to 10)
+    Loop an unbuffered input session, jumping between selected marks (up to 62)
 
     .:: most_commented ::.
-    Select files that have been most commented and play
+    Select files that have been most commented and play (up to 62)
 
     .:: pdb ::.
     Start pdb (debugger). To continue back to the input loop, use 'c'
 
     .:: recent_files ::.
-    Select files that were most recently added and play
+    Select files that were most recently added and play (up to 62)
 
     .:: seek ::.
     Seek forward or backward

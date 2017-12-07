@@ -111,7 +111,7 @@ else:
         - item_format: passed along to ih.make_selections func
         - prompt: passed along to ih.make_selections func
         - unbuffered: if False is explicitly passed in, don't use unbuffered
-          when number of comments is less than 52
+          when number of comments is less than 62
         - kwargs: passed along to `COMMENTS.find` via `get_comments` func
             - if no 'post_fetch_sort_key' passed in, use
               `post_fetch_sort_key='timestamp', sort_key_default_val=0`
@@ -128,7 +128,7 @@ else:
 
         comments = get_comments(**kwargs)
         if unbuffered is None:
-            if len(comments) > 52:
+            if len(comments) > 62:
                 unbuffered = False
             else:
                 unbuffered = True
@@ -158,7 +158,7 @@ else:
                     )
 
     def jumploop(choose_all=False):
-        """Loop an unbuffered input session, jumping between selected marks (up to 52)"""
+        """Loop an unbuffered input session, jumping between selected marks (up to 62)"""
         num_comments = get_comments(count=True)
         if choose_all:
             selected = get_comments(
@@ -167,14 +167,14 @@ else:
             )
         else:
             selected = select_comments(
-                prompt='Select up to 52 comments for jumploop (or type "all")',
+                prompt='Select up to 62 comments for jumploop (or type "all")',
                 unbuffered=False,
                 get_fields='text,timestamp',
                 include_meta=False
             )
         if selected:
             basename = get_current_basename()
-            selected = selected[:52]
+            selected = selected[:62]
             while True:
                 print('\n{}\n'.format(basename))
                 try:
@@ -250,7 +250,7 @@ else:
                     if comment_ids:
                         COMMENTS.delete_many(*comment_ids)
 
-    def recent_files_play_select(limit=25):
+    def recent_files_play_select(limit=62):
         """Select files that were most recently added and play"""
         selected = ih.make_selections(
             FILES.find('audio:True', get_fields='basename', admin_fmt=True, limit=limit),
@@ -261,7 +261,7 @@ else:
         if selected:
             play_basenames(*[x['basename'] for x in selected])
 
-    def most_commented_files_play_select(limit=25):
+    def most_commented_files_play_select(limit=62):
         """Select files that have been most commented and play"""
         selected = ih.make_selections(
             COMMENTS.top_values_for_index('basename', limit=limit),
@@ -312,7 +312,7 @@ chfunc = OrderedDict([
     ('C', (most_commented_files_play_select, 'select files that have been most commented and play (requires yt_helper package)')),
     ('R', (recent_files_play_select, 'select files that were most recently added and play (requires yt_helper package)')),
     ('J', (jump_to_select, 'jump to a saved comment or mark (requires yt_helper package)')),
-    ('\x01', (partial(jumploop, choose_all=True), 'start jumploop session with first 52 marks selected (requires yt_helper package)')),
+    ('\x01', (partial(jumploop, choose_all=True), 'start jumploop session with first 62 marks selected (requires yt_helper package)')),
     ('e', (edit_comment_timestamp_select, 'select comment/mark to edit timestamp (requires yt_helper package)')),
     ('d', (delete_comments_select, 'select comments/marks to delete (requires yt_helper package)')),
     ('D', (delete, 'delete current playing file from filesystem and remove from FILES/COMMENTS (requires yt_helper package)')),
@@ -350,15 +350,15 @@ class _Player(GetCharLoop):
         jump_to_select()
 
     def jumploop(self):
-        """Loop an unbuffered input session, jumping between selected marks (up to 10)"""
+        """Loop an unbuffered input session, jumping between selected marks (up to 62)"""
         jumploop()
 
-    def most_commented(self, limit=25):
-        """Select files that have been most commented and play"""
+    def most_commented(self, limit=62):
+        """Select files that have been most commented and play (up to 62)"""
         most_commented_files_play_select(int(limit))
 
-    def recent_files(self, limit=25):
-        """Select files that were most recently added and play"""
+    def recent_files(self, limit=62):
+        """Select files that were most recently added and play (up to 62)"""
         recent_files_play_select(int(limit))
 
     def delete_comments(self):
