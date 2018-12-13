@@ -2,7 +2,7 @@ import logging
 import os.path
 
 
-LOGFILE = os.path.abspath('log--mocp-cli.log')
+LOGFILE = os.path.abspath(os.path.expanduser('~/logs/mocp-cli.log'))
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 file_handler = logging.FileHandler(LOGFILE, mode='a')
