@@ -22,6 +22,7 @@ setup(
         'yt-helper',
         'chloop',
         'bg-helper',
+        'fs-helper',
         'mocp',
         'click>=6.0',
     ],
