@@ -6,3 +6,8 @@ bg-helper
 chloop
 mocp
 click>=6.0
+
+# For development
+ipython
+pdbpp
+pytest
