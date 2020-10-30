@@ -10,15 +10,16 @@ or
 % brew install moc
 ```
 
-Install Redis and start server
+If you don't have [docker](https://docs.docker.com/get-docker) installed,
+install Redis and start server
 
 ```
 % sudo apt-get install -y redis-server
 
 or
 
-% brew install redis@3.2
-% brew services start redis@3.2
+% brew install redis
+% brew services start redis
 ```
 
 Install with `pip`
