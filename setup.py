@@ -23,7 +23,6 @@ setup(
         'input-helper',
         'mocp',
         'parse-helper',
-        'redis-helper',
         'yt-helper',
     ],
     include_package_data=True,
