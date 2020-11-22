@@ -51,27 +51,6 @@ Install with `pip`
 % pip3 install yt-helper
 ```
 
-### yt-search
-
-In order to use the `yt-search` command (that was installed with `yt-helper`),
-you must also install the `parse-helper` package and it's dependencies.
-
-Install system requirements for `lxml`
-
-```
-% sudo apt-get install -y libxml2 libxslt1.1 libxml2-dev libxslt1-dev zlib1g-dev
-
-or
-
-% brew install libxml2
-```
-
-Install with `pip`
-
-```
-% pip3 install parse-helper
-```
-
 ## Usage
 
 The `mocplayer` script is provided
