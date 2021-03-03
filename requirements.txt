@@ -3,5 +3,3 @@ chloop
 click>=6.0
 input-helper
 mocp
-parse-helper
-yt-helper

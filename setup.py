@@ -22,8 +22,6 @@ setup(
         'fs-helper',
         'input-helper',
         'mocp',
-        'parse-helper',
-        'yt-helper',
     ],
     include_package_data=True,
     package_dir={'': '.'},
