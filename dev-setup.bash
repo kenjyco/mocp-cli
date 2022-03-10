@@ -19,10 +19,6 @@ fi
 [[ ! -d venv ]] && $PYTHON -m venv venv
 PYTHON=$(dirname $PIP)/python
 $PYTHON -m pip install --upgrade pip wheel
-$PIP install -r requirements.txt ${pip_args[@]}
-if [[ ! $(uname) =~ "MINGW" ]]; then
-    $PIP install ipython pdbpp ${pip_args[@]}
-else
-    $PIP install ipython ${pip_args[@]}
-fi
-$PYTHON setup.py develop
+extra_packages=(ipython)
+[[ ! $(uname) =~ "MINGW" ]] && extra_packages+=(pdbpp)
+$PIP install ${extra_packages[@]} ${pip_args[@]} --editable .
