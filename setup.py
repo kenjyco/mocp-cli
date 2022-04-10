@@ -32,12 +32,14 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3.5',
-        'Topic :: Software Development :: Libraries',
-        'Topic :: Multimedia :: Sound/Audio :: Players',
         'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python',
+        'Topic :: Multimedia :: Sound/Audio :: Players',
+        'Topic :: Software Development :: Libraries',
     ],
-    keywords = ['moc', 'mocp', 'console audio', 'mp3 player']
+    keywords=['moc', 'mocp', 'cli', 'command-line', 'console audio', 'repl', 'mp3 player', 'kenjyco']
 )
