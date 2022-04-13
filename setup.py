@@ -12,14 +12,14 @@ with open('requirements-extras.txt', 'r') as fp:
 
 setup(
     name='mocp-cli',
-    version='0.1.19',
+    version='0.1.20',
     description='CLI tools for finding, organizing, and playing audio files',
     long_description=long_description,
     author='Ken',
     author_email='kenjyco@gmail.com',
     license='MIT',
     url='https://github.com/kenjyco/mocp-cli',
-    download_url='https://github.com/kenjyco/mocp-cli/tarball/v0.1.19',
+    download_url='https://github.com/kenjyco/mocp-cli/tarball/v0.1.20',
     packages=find_packages(),
     install_requires=requirements,
     extras_require={
