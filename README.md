@@ -10,7 +10,7 @@ or
 % brew install moc
 ```
 
-If you don't have [docker](https://docs.docker.com/get-docker) installed,
+If you **don't have [docker](https://docs.docker.com/get-docker) installed**,
 install Redis and start server
 
 ```
@@ -33,22 +33,16 @@ Install with `pip`
 ### yt-helper
 
 A lot of what powers the cool interactive features are provided by the
-`COMMENTS` and `FILES` collections defined in `yt_helper`.
-
-Install system av tools
-
-```
-% sudo apt-get install -y libav-tools sox rtmpdump
-
-or
-
-% brew install libav sox rtmpdump
-```
+`COMMENTS` and `FILES` `redis_helper.Collections` defined in `yt_helper`.
 
 Install with `pip`
 
 ```
 % pip3 install yt-helper
+
+or
+
+% pip3 install "mocp-cli[extras]"
 ```
 
 ## Usage

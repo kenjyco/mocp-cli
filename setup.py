@@ -7,6 +7,9 @@ with open('README.rst', 'r') as fp:
 with open('requirements.txt', 'r') as fp:
     requirements = fp.read().splitlines()
 
+with open('requirements-extras.txt', 'r') as fp:
+    requirements_extras = fp.read().splitlines()
+
 setup(
     name='mocp-cli',
     version='0.1.19',
@@ -19,6 +22,9 @@ setup(
     download_url='https://github.com/kenjyco/mocp-cli/tarball/v0.1.19',
     packages=find_packages(),
     install_requires=requirements,
+    extras_require={
+        'extras': requirements_extras,
+    },
     include_package_data=True,
     package_dir={'': '.'},
     package_data={
