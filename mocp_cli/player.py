@@ -10,7 +10,7 @@ try:
     if COMMENTS is None:
         raise ImportError
 
-except ImportError:
+except (ImportError, ModuleNotFoundError):
     input_hook = None
     pre_input_hook = None
 
