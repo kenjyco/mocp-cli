@@ -6,6 +6,12 @@ from collections import OrderedDict
 from chloop import GetCharLoop
 from mocp_cli import logger
 try:
+    ModuleNotFoundError
+except NameError:
+    class ModuleNotFoundError(ImportError):
+        pass
+
+try:
     from yt_helper import AUDIO_COMMENTS as COMMENTS, FILES, get_real_basename
     if COMMENTS is None:
         raise ImportError
